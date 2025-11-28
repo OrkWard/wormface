@@ -4,6 +4,5 @@ output
 .env
 
 # bin
-/pixiv-cli
-/twitter-cli
-/server
+/wormface-server
+/wormface-cli

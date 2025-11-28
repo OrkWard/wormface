@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 	"net/url"
 )
@@ -39,7 +38,7 @@ func (c *Client) FetchBookmark(userID, tag, offset, limit string) (*BookmarkResp
 	}
 
 	req.Header = c.headers
-	log.Println("|> target:", req.URL.String())
+	fmt.Println("[INFO] target:", req.URL.String())
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {

@@ -1,40 +1,37 @@
-package main
+package cmd
 
 import (
 	"context"
 	"encoding/json"
 	"flag"
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 
-	twitter_scraper "github.com/OrkWard/wormface/internal/utils"
+	"github.com/OrkWard/wormface/internal/utils"
 	"github.com/OrkWard/wormface/pkg/twitter"
-	"github.com/joho/godotenv"
 )
 
-func main() {
-	if err := godotenv.Load(".env"); err != nil {
-		log.Fatal("Error loading .env file")
-	}
+func CmdTwitter(args []string) {
+	// Parse args
+	twitterFlags := flag.NewFlagSet("wormface twitter", flag.ExitOnError)
+	noVideo := twitterFlags.Bool("v", false, "Only download images")
+	noImage := twitterFlags.Bool("i", false, "Only download videos")
+	maxCount := twitterFlags.Int("l", 0, "Limit the number of media to download")
+	twitterFlags.Parse(args)
 
-	noVideo := flag.Bool("v", false, "Only download images")
-	noImage := flag.Bool("i", false, "Only download videos")
-	maxCount := flag.Int("l", 0, "Limit the number of media to download")
-	flag.Parse()
-
-	args := flag.Args()
-	if len(args) < 1 {
-		fmt.Println("Usage: twitter-scraper [options] <username>")
-		flag.PrintDefaults()
+	positionArgs := twitterFlags.Args()
+	if len(positionArgs) < 1 {
+		fmt.Println("Usage: wormface-cli twitter [options] <username>")
+		twitterFlags.PrintDefaults()
 		os.Exit(1)
 	}
-	userName := args[0]
+	userName := positionArgs[0]
 
 	fmt.Printf("[INPUT] Scraping user: %s\n", userName)
 	fmt.Printf("[OPTION] No video: %v, No image: %v, Limit: %d\n", *noVideo, *noImage, *maxCount)
 
+	// Init client
 	headers := http.Header{}
 	headers.Set("Cookie", os.Getenv("cookie"))
 	headers.Set("X-CSRF-Token", os.Getenv("X_CSRF_TOKEN"))
@@ -45,6 +42,7 @@ func main() {
 	client := twitter.NewTwitterClient(context.Background(), headers)
 	defer client.Close()
 
+	// Get user ID
 	userId, err := client.GetUserId(userName)
 	if err != nil {
 		fmt.Printf("Error getting user ID: %v\n", err)
@@ -78,7 +76,7 @@ func main() {
 		images = append(images, result.Images...)
 		videos = append(videos, result.Videos...)
 
-		fmt.Printf("\r[PROGRESS] %c Fetched %d images and %d videos...", twitter_scraper.GetChar(), len(images), len(videos))
+		fmt.Printf("\r[PROGRESS] %c Fetched %d images and %d videos...", utils.GetChar(), len(images), len(videos))
 
 		if result.Cursor == "" {
 			break
@@ -100,12 +98,12 @@ func main() {
 	// Download files
 	if !*noImage {
 		fmt.Println("[INFO] Downloading images...")
-		twitter_scraper.DownloadAll(images, outputDir)
+		utils.DownloadAll(images, outputDir)
 	}
 
 	if !*noVideo {
 		fmt.Println("[INFO] Downloading videos...")
-		twitter_scraper.DownloadAll(videos, outputDir)
+		utils.DownloadAll(videos, outputDir)
 	}
 }
 

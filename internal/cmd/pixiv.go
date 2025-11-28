@@ -1,4 +1,4 @@
-package main
+package cmd
 
 import (
 	"context"
@@ -11,16 +11,10 @@ import (
 	"time"
 
 	"github.com/OrkWard/wormface/pkg/pixiv"
-	"github.com/joho/godotenv"
 )
 
-func main() {
-	// Load .env file
-	if err := godotenv.Load(); err != nil {
-		log.Println("No .env file found, loading from environment")
-	}
+func CmdPixiv(args []string) {
 
-	// Define flags
 	tag := flag.String("t", "", "Filter by tag")
 	limit := flag.Int("l", 30, "Number of works to fetch per page")
 	offset := flag.Int("o", 0, "Starting offset")
@@ -28,9 +22,8 @@ func main() {
 	flag.Parse()
 
 	// Get user ID from arguments
-	args := flag.Args()
 	if len(args) < 1 {
-		log.Println("Usage: pixiv-scraper <user_id> [options]")
+		log.Println("Usage: wormface-cli pixiv <user_id> [options]")
 		flag.PrintDefaults()
 		os.Exit(1)
 	}
