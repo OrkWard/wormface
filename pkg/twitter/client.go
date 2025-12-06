@@ -2,7 +2,6 @@ package twitter
 
 import (
 	"context"
-	"log"
 	"net/http"
 )
 
@@ -48,8 +47,5 @@ func (c *TwitterClient) waitReady() error {
 func (c *TwitterClient) Close() error {
 	<-c.ready
 
-	if c.gqlClient != nil {
-		log.Print("Closing client connection\n")
-	}
 	return nil
 }

@@ -10,6 +10,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/OrkWard/wormface/internal/utils"
 	"github.com/OrkWard/wormface/pkg/pixiv"
 )
 
@@ -38,8 +39,11 @@ func CmdPixiv(args []string) {
 
 	// Create Pixiv client
 	headers := http.Header{}
-	headers.Set("Cookie", os.Getenv("PIXIV_COOKIE"))
-	headers.Set("User-Agent", os.Getenv("PIXIV_USER_AGENT"))
+	if utils.Config.Pixiv.Cookie == "" || utils.Config.Pixiv.Agent == "" {
+		panic("pixiv config not set")
+	}
+	headers.Set("Cookie", utils.Config.Pixiv.Cookie)
+	headers.Set("User-Agent", utils.Config.Pixiv.Agent)
 	client := pixiv.NewClient(context.Background(), headers)
 
 	// Main loop

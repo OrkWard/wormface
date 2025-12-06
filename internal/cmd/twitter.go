@@ -33,9 +33,12 @@ func CmdTwitter(args []string) {
 
 	// Init client
 	headers := http.Header{}
-	headers.Set("Cookie", os.Getenv("cookie"))
-	headers.Set("X-CSRF-Token", os.Getenv("X_CSRF_TOKEN"))
-	headers.Set("Authorization", os.Getenv("Authorization"))
+	if utils.Config.Twitter.CsrfToken == "" || utils.Config.Twitter.Authorization == "" || utils.Config.Twitter.Cookie == "" {
+		panic("twitter config not set")
+	}
+	headers.Set("Cookie", utils.Config.Twitter.Cookie)
+	headers.Set("X-CSRF-Token", utils.Config.Twitter.CsrfToken)
+	headers.Set("Authorization", utils.Config.Twitter.Authorization)
 	headers.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36")
 	headers.Set("Referer", fmt.Sprintf("https://x.com/%s/media", userName))
 

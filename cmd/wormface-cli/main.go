@@ -2,16 +2,15 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
 
 	"github.com/OrkWard/wormface/internal/cmd"
-	"github.com/joho/godotenv"
+	"github.com/OrkWard/wormface/internal/utils"
 )
 
 func main() {
-	if err := godotenv.Load(".env"); err != nil {
-		log.Fatal("Error loading .env file")
+	if err := utils.InitConfig(); err != nil {
+		panic(err)
 	}
 
 	args := os.Args
