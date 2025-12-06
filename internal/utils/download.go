@@ -24,6 +24,15 @@ func listenForShutdown() {
 }
 
 func DownloadAll(urls []string, outputDir string) {
+	DownloadAllWithClient(urls, outputDir, http.DefaultClient)
+}
+
+func DownloadAllWithClient(urls []string, outputDir string, client *http.Client) {
+	if client == nil {
+		client = http.DefaultClient
+	}
+
+	shutdown = false
 	go listenForShutdown()
 
 	// Check for interrupt file
@@ -41,15 +50,17 @@ func DownloadAll(urls []string, outputDir string) {
 	urlChan := make(chan string)
 
 	for range 10 {
-		wg.Go(func() {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
 			for url := range urlChan {
 				if shutdown {
 					return
 				}
-				downloadFile(url, outputDir)
+				downloadFileWithClient(client, url, outputDir)
 				time.Sleep(500 * time.Millisecond) // Be nice to the server
 			}
-		})
+		}()
 	}
 
 	remainingUrls := urls
@@ -75,20 +86,38 @@ func DownloadAll(urls []string, outputDir string) {
 	}
 }
 
-func downloadFile(url, outputDir string) {
+func downloadFileWithClient(client *http.Client, url, outputDir string) {
 	if url == "" {
 		return
 	}
-	resp, err := http.Get(url)
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		fmt.Printf("[ERROR] Error building request for %s: %v\n", url, err)
+		return
+	}
+
+	resp, err := client.Do(req)
 	if err != nil {
 		fmt.Printf("[ERROR] Error downloading %s: %v\n", url, err)
 		return
 	}
 	defer resp.Body.Close()
 
-	fileName := path.Base(url)
-	// The URL might have query params, so we need to clean the filename
+	if resp.StatusCode >= 400 {
+		fmt.Printf("[ERROR] Unexpected status downloading %s: %s\n", url, resp.Status)
+		return
+	}
+
+	fileName := path.Base(resp.Request.URL.Path)
 	fileName = strings.Split(fileName, "?")[0]
+	if fileName == "" || fileName == "/" || fileName == "." {
+		fileName = path.Base(url)
+		fileName = strings.Split(fileName, "?")[0]
+	}
+
+	if fileName == "" || fileName == "/" || fileName == "." {
+		fileName = fmt.Sprintf("download_%d", time.Now().UnixNano())
+	}
 
 	filePath := path.Join(outputDir, fileName)
 
@@ -99,8 +128,7 @@ func downloadFile(url, outputDir string) {
 	}
 	defer out.Close()
 
-	_, err = io.Copy(out, resp.Body)
-	if err != nil {
+	if _, err = io.Copy(out, resp.Body); err != nil {
 		fmt.Printf("Error writing to file %s: %v\n", filePath, err)
 	}
 }

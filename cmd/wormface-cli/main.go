@@ -15,7 +15,7 @@ func main() {
 
 	args := os.Args
 	if len(args) < 2 {
-		fmt.Println("Usage: wormface-cli [twitter | pixiv] ...")
+		fmt.Println("Usage: wormface-cli [twitter | pixiv | html] ...")
 		os.Exit(1)
 	}
 
@@ -24,8 +24,10 @@ func main() {
 		cmd.CmdTwitter(args[2:])
 	case "pixiv":
 		cmd.CmdPixiv(args[2:])
+	case "html":
+		cmd.CmdHTML(args[2:])
 	default:
-		fmt.Println("Usage: wormface-cli [twitter | pixiv] ...")
+		fmt.Println("Usage: wormface-cli [twitter | pixiv | html] ...")
 		os.Exit(1)
 	}
 }
