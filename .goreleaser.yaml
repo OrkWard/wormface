@@ -8,7 +8,8 @@ before:
     - go mod tidy
 
 builds:
-  - id: wormface-server
+  - id: server
+    binary: wormface-server
     main: ./cmd/wormface-server
     env:
       - CGO_ENABLED=0
@@ -24,7 +25,8 @@ builds:
         goarch: arm64
       - goos: darwin
         goarch: amd64
-  - id: wormface-cli
+  - id: cli
+    binary: wormface-cli
     main: ./cmd/wormface-cli
     env:
       - CGO_ENABLED=0
@@ -43,6 +45,8 @@ builds:
 
 archives:
   - formats: [tar.gz]
+    builds:
+      - cli
     # this name template makes the OS and Arch compatible with the results of `uname`.
     name_template: >-
       {{ .ProjectName }}_
