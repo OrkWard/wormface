@@ -4,6 +4,7 @@ import (
 	"errors"
 	"os"
 	"path/filepath"
+	"runtime"
 
 	"github.com/spf13/viper"
 )
@@ -27,6 +28,7 @@ func InitConfig() error {
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath("$XDG_CONFIG_HOME/wormface-cli")
 	viper.AddConfigPath("$HOME/.config/wormface-cli")
+	viper.AddConfigPath("%APPDATA%/wormface-cli")
 
 	// write default
 	if err := viper.ReadInConfig(); err != nil {
@@ -35,7 +37,12 @@ func InitConfig() error {
 			return err
 		}
 
-		var defaultConfigHome = filepath.Join(os.Getenv("HOME"), ".config", "wormface-cli")
+		var defaultConfigHome string
+		if runtime.GOOS == "windows" {
+			defaultConfigHome = filepath.Join(os.Getenv("APPDATA"), "wormface-cli")
+		} else {
+			defaultConfigHome = filepath.Join(os.Getenv("HOME"), ".config", "wormface-cli")
+		}
 		var defaultConfigPath = filepath.Join(defaultConfigHome, "config.yaml")
 
 		if err := os.MkdirAll(defaultConfigHome, 0755); err != nil {
