@@ -6,3 +6,5 @@ output
 # bin
 /wormface-server
 /wormface-cli
+# Added by goreleaser init:
+dist/
