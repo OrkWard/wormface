@@ -1,4 +1,4 @@
-package scraper_server
+package server
 
 import (
 	"context"

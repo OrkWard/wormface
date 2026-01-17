@@ -320,7 +320,7 @@ host: localhost:8080
 info:
   contact: {}
   description: This is a scraper API server.
-  title: Scraper API
+  title: wormface server
   version: "1.0"
 paths:
   /twitter/{userName}/posts:

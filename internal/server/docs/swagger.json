@@ -2,7 +2,7 @@
     "swagger": "2.0",
     "info": {
         "description": "This is a scraper API server.",
-        "title": "Scraper API",
+        "title": "wormface server",
         "contact": {},
         "version": "1.0"
     },

@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"time"
 
@@ -47,18 +48,21 @@ func MakeYoutubeHandler(ytClient *youtube.YouTubeClient, redisClient *redis.Clie
 
 		channelId, err := ytClient.FetchChannelId(channelName)
 		if err != nil {
+			log.Println(err)
 			http.Error(w, "Failed to fetch channel ID", http.StatusInternalServerError)
 			return
 		}
 
 		videos, err := ytClient.FetchChannelVideos(channelId)
 		if err != nil {
+			log.Println(err)
 			http.Error(w, "Failed to fetch channel videos", http.StatusInternalServerError)
 			return
 		}
 
 		bytes, err := json.Marshal(videos)
 		if err != nil {
+			log.Println(err)
 			http.Error(w, "Failed to marshal videos", http.StatusInternalServerError)
 			return
 		}

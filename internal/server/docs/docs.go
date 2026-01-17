@@ -600,7 +600,7 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "localhost:8080",
 	BasePath:         "/",
 	Schemes:          []string{},
-	Title:            "Scraper API",
+	Title:            "wormface server",
 	Description:      "This is a scraper API server.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
