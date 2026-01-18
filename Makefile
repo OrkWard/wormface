@@ -14,7 +14,6 @@ server:
 docker:
 	docker build \
 	  --build-arg GIT_TAG=$(GIT_TAG) \
-	  --platform linux/amd64,linux/arm64 \
 	  -t $(IMAGE_NAME):$(GIT_TAG) \
 	  -t $(IMAGE_NAME):latest .
 
