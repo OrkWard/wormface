@@ -1,6 +1,6 @@
 twitter:
-  cookie: op://Project/wormface/twitter/cookie
+  X_COOKIE: op://Project/wormface/twitter/cookie
   X_CSRF_TOKEN: op://Project/wormface/twitter/x_csrf_token
-  Authorization: op://Project/wormface/twitter/authorization
+  X_AUTHORIZATION: op://Project/wormface/twitter/authorization
 pixiv:
   PIXIV_COOKIE: ""

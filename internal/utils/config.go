@@ -11,9 +11,9 @@ import (
 
 type CliConfig struct {
 	Twitter struct {
-		Cookie        string `mapstructure:"cookie"`
+		Cookie        string `mapstructure:"X_COOKIE"`
 		CsrfToken     string `mapstructure:"X_CSRF_TOKEN"`
-		Authorization string `mapstructure:"Authorization"`
+		Authorization string `mapstructure:"X_AUTHORIZATION"`
 	} `mapstructure:"twitter"`
 	Pixiv struct {
 		Cookie string `mapstructure:"PIXIV_COOKIE"`

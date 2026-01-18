@@ -1,7 +1,7 @@
 IMAGE_NAME := ghcr.io/orkward/wormface
 GIT_TAG := $(shell git describe --tags --always)
 
-.PHONY: all docker push
+.PHONY: all docker push config
 
 all: cli server
 
@@ -24,3 +24,6 @@ push: docker
 
 generate-swagger:
 	swag init -g cmd/wormface-server/main.go -o internal/server/docs
+
+config:
+	op inject -f -i example.env -o .env
