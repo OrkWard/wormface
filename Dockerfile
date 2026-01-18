@@ -2,6 +2,7 @@
 FROM golang:1.25.4-alpine AS builder
 ARG GIT_TAG
 LABEL org.opencontainers.image.version=$GIT_TAG
+LABEL org.opencontainers.image.source="https://github.com/OrkWard/wormface"
 WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
