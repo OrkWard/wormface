@@ -14,4 +14,4 @@ LABEL org.opencontainers.image.version=$GIT_TAG
 LABEL org.opencontainers.image.source="https://github.com/OrkWard/wormface"
 COPY --from=builder /bin/wormface-server /bin/
 
-CMD ["/bin/womface-server"]
+CMD ["/bin/wormface-server"]
