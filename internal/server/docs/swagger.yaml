@@ -41,6 +41,8 @@ definitions:
           variants:
             items:
               properties:
+                bitrate:
+                  type: integer
                 content_type:
                   type: string
                 url:

@@ -168,6 +168,9 @@ const docTemplate = `{
                             "items": {
                                 "type": "object",
                                 "properties": {
+                                    "bitrate": {
+                                        "type": "integer"
+                                    },
                                     "content_type": {
                                         "type": "string"
                                     },
