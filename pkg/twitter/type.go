@@ -131,6 +131,7 @@ type Media struct {
 		DurationMillis int   `json:"duration_millis"`
 		AspectRatio    []int `json:"aspect_ratio"`
 		Variants       []struct {
+			Bitrate     int    `json:"bitrate"`
 			ContentType string `json:"content_type"`
 			URL         string `json:"url"`
 		} `json:"variants"`
