@@ -1,4 +1,4 @@
-IMAGE_NAME := ghcr.io/orkward/wormface
+IMAGE_NAME := localhost:5000/wormface
 GIT_TAG := $(shell git describe --tags --always)
 
 .PHONY: all docker push config
